@@ -5,71 +5,75 @@ function getComputerChoice() {
     else return "scissors";
 }
 
-function getHumanChoice() {
-    return prompt("Rock, Paper, or Scissors").toLowerCase();
-}
-
-function humanLose(humanChoice, compChoice) {
-    console.log(`You lose. ${compChoice} beats ${humanChoice}`);
-}
-
-function humanWin(humanChoice, compChoice) {
-    console.log(`You Win. ${humanChoice} beats ${compChoice}`);
-}
 function playRound(humanChoice, compChoice) {
+    const historyItem = document.createElement("li");
+    historyItem.textContent = "";
     if (humanChoice === compChoice) {
-        console.log(`Tie. Both players picked ${humanChoice}`);
+        historyItem.textContent = `Tie. Both players picked ${humanChoice}`;
+        moveHistory.prepend(historyItem);
     } else if (humanChoice === "rock") {
         if (compChoice == "paper") {
-            humanLose(humanChoice, compChoice);
-            return 0;
+            historyItem.textContent = `Lose. ${compChoice} beats ${humanChoice}`;
+            moveHistory.prepend(historyItem);
+            return false;
         } else {
-            humanWin(humanChoice, compChoice);
-            return 1;
+            historyItem.textContent = `Win. ${humanChoice} beats ${compChoice}`;
+            moveHistory.prepend(historyItem);
+            return true;
         }
     } else if (humanChoice === "paper") {
         if (compChoice == "scissors") {
-            humanLose(humanChoice, compChoice);
-            return 0;
+            historyItem.textContent = `Lose. ${compChoice} beats ${humanChoice}`;
+            moveHistory.prepend(historyItem);
+            return false;
         } else {
-            humanWin(humanChoice, compChoice);
-            return 1;
+            historyItem.textContent = `Win. ${humanChoice} beats ${compChoice}`;
+            moveHistory.prepend(historyItem);
+            return true;
         }
     } else if (humanChoice === "scissors") {
         if (compChoice == "rock") {
-            humanLose(humanChoice, compChoice);
-            return 0;
+            historyItem.textContent = `Lose. ${compChoice} beats ${humanChoice}`;
+            moveHistory.prepend(historyItem);
+            return false;
         } else {
-            humanWin(humanChoice, compChoice);
-            return 1;
+            historyItem.textContent = `Win. ${humanChoice} beats ${compChoice}`;
+            moveHistory.prepend(historyItem);
+            return true;
         }
-    } else {
-        console.log("Please Enter Valid Choice");
     }
 }
 
-function playGame() {
-    let humanScore = 0;
-    let compScore = 0;
+function scoreRound(humanChoice) {
+    const humanWins = playRound(humanChoice, getComputerChoice());
 
-    while (humanScore < 3 && compScore < 3) {
-        const compChoice = getComputerChoice();
-        const humanChoice = getHumanChoice();
-
-        const roundResult = playRound(humanChoice, compChoice);
-
-        if (roundResult == 1) {
-            humanScore++;
-        } else if (roundResult === 0) {
-            compScore++;
-        }
-        console.log(`Human: ${humanScore} Computer: ${compScore}`);
-    }
-    if (humanScore > compScore) {
-        console.log("You Win!");
+    if (humanWins) {
+        humanScoreValue++;
     } else {
-        console.log("You Lose");
+        compScoreValue++;
     }
+    humanScoreDisplay.textContent = humanScoreValue;
+    compScoreDisplay.textContent = compScoreValue;
 }
 
-playGame();
+let humanScoreValue = 0;
+let compScoreValue = 0;
+
+const rockButton = document.querySelector(".rock");
+const paperButton = document.querySelector(".paper");
+const scissorsButton = document.querySelector(".scissors");
+
+const moveHistory = document.querySelector("ul");
+
+const humanScoreDisplay = document.querySelector(".humanScore");
+const compScoreDisplay = document.querySelector(".compScore");
+
+rockButton.addEventListener("click", () => {
+    scoreRound("rock");
+});
+paperButton.addEventListener("click", () => {
+    scoreRound("paper");
+});
+scissorsButton.addEventListener("click", () => {
+    scoreRound("scissors");
+});
